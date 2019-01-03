@@ -624,4 +624,56 @@ mod tests {
       vec![]
     ));
   }
+
+  #[test]
+  fn parse_instr_while() {
+    let (instr, _) = instr().parse(
+      "\
+      while(1) \n\
+        short x \n\
+      endwhile \n\
+      "
+    ).unwrap();
+    assert_eq!(instr, Instr::While(
+      Expr::Brackets(Box::new(Expr::Long(1))),
+      vec![Instr::ShortVar("x".to_owned())]
+    ));
+  }
+
+  #[test]
+  fn parse_instr_proc() {
+    let (instr, _) = instr().parse("StartScript test \n").unwrap();
+    assert_eq!(instr, Instr::Proc(
+      None,
+      Proc::StartScript,
+      vec![Arg::Id("test".to_owned())]
+    ));
+  }
+
+  #[test]
+  fn parse_instr_proc_fix() {
+    let (instr, _) = instr().parse("Player->AddItem gold_001 100 \n").unwrap();
+    assert_eq!(instr, Instr::Proc(
+      Some("Player".to_owned()),
+      Proc::AddItem,
+      vec![Arg::Id("gold_001".to_owned()), Arg::Expr(Expr::Long(100))]
+    ));
+  }
+
+  #[test]
+  fn parse_script() {
+    let (script, _) = script().parse(
+      "\
+      begin script \n\
+        short x \n\
+      end script \n\
+      "
+    ).unwrap();
+    assert_eq!(script, Script {
+      name: "script".to_owned(),
+      instrs: vec![
+        Instr::ShortVar("x".to_owned()),
+      ],
+    });
+  }
 }
