@@ -14,8 +14,8 @@ pub use self::snam::*;
 
 use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
 
-use binary::*;
-use esx::util::name_to_string;
+use crate::binary::*;
+use crate::esx::util::name_to_string;
 
 esx_sub_record! {
   enum RegnSubRecord {
@@ -32,7 +32,7 @@ esx_sub_record! {
 mod tests {
   use super::*;
 
-  use esx::color_ref::ColorRef;
+  use crate::esx::color_ref::ColorRef;
 
   read_write_test!(regn_sub_record_name_read_write, RegnSubRecord::Name(RegnName {
     name: String::from("42")

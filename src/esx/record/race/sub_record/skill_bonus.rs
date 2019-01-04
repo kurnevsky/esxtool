@@ -1,6 +1,6 @@
 use std::io::{Read, Result, Seek, Write};
 
-use binary::*;
+use crate::binary::*;
 
 esx_data! {
   struct SkillBonus {

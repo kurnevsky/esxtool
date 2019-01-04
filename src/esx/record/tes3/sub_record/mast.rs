@@ -1,6 +1,6 @@
 use std::io::{Read, Result, Seek, Write};
 
-use binary::*;
+use crate::binary::*;
 
 esx_sub_record_string! {
   struct Tes3Mast(master_file_name)

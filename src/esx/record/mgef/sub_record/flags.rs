@@ -1,6 +1,6 @@
 use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
 
-use binary::Binary;
+use crate::binary::Binary;
 
 bitflags! {
   pub struct Flags: u32 {

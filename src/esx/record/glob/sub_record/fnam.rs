@@ -1,7 +1,7 @@
 use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
 
 use super::global_type::GlobalType;
-use binary::*;
+use crate::binary::*;
 
 esx_sub_record_simple! {
   struct GlobFnam {

@@ -4,7 +4,7 @@ use std::io::{Error, ErrorKind, Read, Result, Seek, SeekFrom, Write};
 
 use super::record_flags::RecordFlags;
 use self::sub_record::*;
-use binary::*;
+use crate::binary::*;
 
 esx_record!(SkilRecord, SkilSubRecord);
 
@@ -12,7 +12,7 @@ esx_record!(SkilRecord, SkilSubRecord);
 mod tests {
   use super::*;
 
-  use esx::specialization::Specialization;
+  use crate::esx::specialization::Specialization;
 
   read_write_test!(skil_record_read_write, SkilRecord {
     unknown: 42,

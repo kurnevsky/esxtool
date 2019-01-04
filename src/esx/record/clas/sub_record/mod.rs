@@ -14,8 +14,8 @@ pub use self::desc::*;
 
 use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
 
-use binary::*;
-use esx::util::name_to_string;
+use crate::binary::*;
+use crate::esx::util::name_to_string;
 
 esx_sub_record! {
   enum ClasSubRecord {
@@ -30,7 +30,7 @@ esx_sub_record! {
 mod tests {
   use super::*;
 
-  use esx::specialization::Specialization;
+  use crate::esx::specialization::Specialization;
 
   read_write_test!(clas_sub_record_name_read_write, ClasSubRecord::Name(ClasName {
     name: String::from("42")

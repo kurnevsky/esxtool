@@ -2,8 +2,8 @@ use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
 
 use super::flags::Flags;
 use super::auto_calc_flags::AutoCalcFlags;
-use binary::*;
-use esx::specialization::Specialization;
+use crate::binary::*;
+use crate::esx::specialization::Specialization;
 
 esx_sub_record_simple! {
   struct ClasCldt {

@@ -1,7 +1,7 @@
 use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
 
-use binary::*;
-use esx::specialization::Specialization;
+use crate::binary::*;
+use crate::esx::specialization::Specialization;
 
 esx_sub_record_simple! {
   struct SkilSkdt {

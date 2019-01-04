@@ -23,8 +23,8 @@ use clap::{App, AppSettings, Arg, SubCommand};
 use encoding::all::WINDOWS_1252;
 use seek_bufread::BufReader;
 
-use binary::Binary;
-use esx::Esx;
+use crate::binary::Binary;
+use crate::esx::Esx;
 
 fn main() -> Result<()> {
   let input_arg = Arg::with_name("input")
@@ -83,8 +83,8 @@ fn main() -> Result<()> {
     use combine::Parser;
     use combine::stream::state::State;
 
-    use esx::record::Record;
-    use esx::record::scpt::sub_record::ScptSubRecord;
+    use crate::esx::record::Record;
+    use crate::esx::record::scpt::sub_record::ScptSubRecord;
 
     let input = matches.value_of("input").expect("Input is required");
 

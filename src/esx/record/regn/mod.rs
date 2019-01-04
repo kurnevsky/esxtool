@@ -4,7 +4,7 @@ use std::io::{Error, ErrorKind, Read, Result, Seek, SeekFrom, Write};
 
 use super::record_flags::RecordFlags;
 use self::sub_record::*;
-use binary::*;
+use crate::binary::*;
 
 esx_record!(RegnRecord, RegnSubRecord);
 
@@ -12,7 +12,7 @@ esx_record!(RegnRecord, RegnSubRecord);
 mod tests {
   use super::*;
 
-  use esx::color_ref::ColorRef;
+  use crate::esx::color_ref::ColorRef;
 
   read_write_test!(regn_record_read_write, RegnRecord {
     unknown: 42,

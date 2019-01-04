@@ -1,6 +1,6 @@
 use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
 
-use binary::*;
+use crate::binary::*;
 
 esx_enum! {
   enum Specialization: u32 {

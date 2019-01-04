@@ -3,7 +3,7 @@ use std::mem::{size_of, uninitialized};
 
 use byteorder::LE;
 use encoding::{DecoderTrap, EncoderTrap, Encoding};
-use primitive::{PrimitiveRead, PrimitiveWrite};
+use crate::primitive::{PrimitiveRead, PrimitiveWrite};
 
 pub trait Binary : Sized {
   fn read<R: Read + Seek, E: Encoding>(input: &mut R, encoding: &E) -> Result<Self>;

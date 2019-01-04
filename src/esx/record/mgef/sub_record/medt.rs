@@ -2,7 +2,7 @@ use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
 
 use super::spell_school::SpellSchool;
 use super::flags::Flags;
-use binary::*;
+use crate::binary::*;
 
 esx_sub_record_simple! {
   struct MgefMedt {

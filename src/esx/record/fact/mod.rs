@@ -4,7 +4,7 @@ use std::io::{Error, ErrorKind, Read, Result, Seek, SeekFrom, Write};
 
 use super::record_flags::RecordFlags;
 use self::sub_record::*;
-use binary::*;
+use crate::binary::*;
 
 esx_record!(FactRecord, FactSubRecord);
 

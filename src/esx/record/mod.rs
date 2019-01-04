@@ -33,7 +33,7 @@ use self::bsgn::BsgnRecord;
 use self::ltex::LtexRecord;
 use self::stat::StatRecord;
 use self::unknown::UnknownRecord;
-use binary::*;
+use crate::binary::*;
 
 macro_rules! record {
   ( $( $variant:ident ( $value:ty ) => $name:expr ),* ) => {

@@ -18,8 +18,8 @@ pub use self::intv::*;
 
 use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
 
-use binary::*;
-use esx::util::name_to_string;
+use crate::binary::*;
+use crate::esx::util::name_to_string;
 
 esx_sub_record! {
   enum FactSubRecord {

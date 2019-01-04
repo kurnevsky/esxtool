@@ -3,7 +3,7 @@ use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
 use encoding::Encoding;
 
 use super::file_type::FileType;
-use binary::*;
+use crate::binary::*;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Tes3Hedr {

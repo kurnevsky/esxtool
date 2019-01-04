@@ -2,7 +2,7 @@ use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
 
 use encoding::Encoding;
 
-use binary::*;
+use crate::binary::*;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct RegnSnam {

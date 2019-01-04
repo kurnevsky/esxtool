@@ -3,7 +3,7 @@ use std::io::{Error, ErrorKind, Read, Result, Seek, SeekFrom, Write};
 use encoding::Encoding;
 
 use super::record_flags::RecordFlags;
-use binary::*;
+use crate::binary::*;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct UnknownRecord {

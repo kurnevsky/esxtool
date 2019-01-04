@@ -2,7 +2,7 @@ use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
 
 use super::rank_data::RankData;
 use super::flags::Flags;
-use binary::*;
+use crate::binary::*;
 
 esx_sub_record_simple! {
   struct FactFadt {

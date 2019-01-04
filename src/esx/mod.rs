@@ -10,7 +10,7 @@ use encoding::Encoding;
 
 use self::record::Record;
 use self::record::tes3::sub_record::Tes3SubRecord;
-use binary::*;
+use crate::binary::*;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Esx {

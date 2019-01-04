@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 
-use esx::Esx;
-use esx::record::Record;
-use esx::util::name_to_string;
+use crate::esx::Esx;
+use crate::esx::record::Record;
+use crate::esx::util::name_to_string;
 
 pub fn stats(esx: &Esx) {
   let mut map = HashMap::new();

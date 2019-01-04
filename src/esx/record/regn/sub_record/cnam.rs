@@ -1,7 +1,7 @@
 use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
 
-use binary::*;
-use esx::color_ref::ColorRef;
+use crate::binary::*;
+use crate::esx::color_ref::ColorRef;
 
 esx_sub_record_simple! {
   struct RegnCnam {
