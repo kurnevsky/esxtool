@@ -118,11 +118,7 @@ fn main() -> Result<()> {
     println!("Total invalid scripts count: {}", invalid_count);
   } else if let Some(matches) = matches.subcommand_matches("noop") {
     let input = matches.value_of("input").expect("Input is required");
-    let output = if matches.is_present("output") {
-      Some(matches.value_of("input").expect("Input is required"))
-    } else {
-      None
-    };
+    let output = matches.value_of("output");
 
     let file = File::open(input)?;
     let mut file = BufReader::new(file);
