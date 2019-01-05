@@ -2,7 +2,7 @@ use std::io::{Read, Result, Seek, Write};
 
 use crate::binary::*;
 
-esx_sub_record_string! {
+esx_sub_record_null_terminated_string! {
   struct MgefAvfx(area_visual)
 }
 

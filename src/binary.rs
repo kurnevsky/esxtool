@@ -50,14 +50,10 @@ binary_array!(0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15);
 pub fn read_string<R: Read, E: Encoding>(input: &mut R, encoding: &E, len: u32) -> Result<String> {
   let mut buf = vec![0; len as usize];
   input.read_exact(&mut buf)?;
-  if let Some(idx) = buf.iter().rposition(|&c| c != 0) {
-      buf.truncate(idx + 1);
-      encoding.decode(&buf, DecoderTrap::Strict).map_err(|e|
-        Error::new(ErrorKind::InvalidData, e.to_string())
-      )
-    } else {
-      Ok(String::new())
-    }
+  let len_not_null = buf.iter().rposition(|&c| c != 0).map_or(0, |idx| idx + 1);
+  encoding.decode(&buf[0..len_not_null], DecoderTrap::Strict).map_err(|e|
+    Error::new(ErrorKind::InvalidData, e.to_string())
+  )
 }
 
 pub fn write_string_exact<W: Write, E: Encoding>(output: &mut W, encoding: &E, s: &str, len: u32) -> Result<u32> {

@@ -236,8 +236,16 @@ macro_rules! esx_sub_record_string {
 
     impl Binary for $name {
       fn read<R: Read + Seek, E: encoding::Encoding>(input: &mut R, encoding: &E) -> Result<Self> {
-        let size = u32::read(input, encoding)?;
-        let $field = read_string(input, encoding, size)?;
+        let size = u32::read(input, encoding)? as usize;
+        let mut buf = vec![0; size];
+        input.read_exact(&mut buf)?;
+        let size_not_null = buf.iter().rposition(|&c| c != 0).map_or(0, |idx| idx + 1);
+        if size_not_null != size {
+          warn!("Got null terminated {}", stringify!($name));
+        }
+        let $field = encoding.decode(&buf[0..size_not_null], encoding::DecoderTrap::Strict).map_err(|e|
+          std::io::Error::new(std::io::ErrorKind::InvalidData, e.to_string())
+        )?;
         Ok($name {
           $field
         })
@@ -250,6 +258,45 @@ macro_rules! esx_sub_record_string {
         let len = buf.len() as u32;
         len.write(output, encoding)?;
         output.write_all(&buf)?;
+        Ok(len + 4)
+      }
+    }
+  }
+}
+
+macro_rules! esx_sub_record_null_terminated_string {
+  ( struct $name:ident ( $field:ident ) ) => {
+    #[derive(Debug, Clone, PartialEq)]
+    pub struct $name {
+      pub $field: String
+    }
+
+    impl Binary for $name {
+      fn read<R: Read + Seek, E: encoding::Encoding>(input: &mut R, encoding: &E) -> Result<Self> {
+        let size = u32::read(input, encoding)? as usize;
+        let mut buf = vec![0; size];
+        input.read_exact(&mut buf)?;
+        let size_not_null = buf.iter().rposition(|&c| c != 0).map_or(0, |idx| idx + 1);
+        if size_not_null == size {
+          warn!("Got not null terminated {}", stringify!($name));
+        }
+        let $field = encoding.decode(&buf[0..size_not_null], encoding::DecoderTrap::Strict).map_err(|e|
+          std::io::Error::new(std::io::ErrorKind::InvalidData, e.to_string())
+        )?;
+        Ok($name {
+          $field
+        })
+      }
+
+      fn write<W: Write + Seek, E: encoding::Encoding>(&self, output: &mut W, encoding: &E) -> Result<u32> {
+        use byteorder::WriteBytesExt;
+        let buf = encoding.encode(&self.$field, encoding::EncoderTrap::Strict).map_err(|e|
+            std::io::Error::new(std::io::ErrorKind::InvalidData, e.to_string())
+        )?;
+        let len = buf.len() as u32 + 1;
+        len.write(output, encoding)?;
+        output.write_all(&buf)?;
+        output.write_u8(0)?;
         Ok(len + 4)
       }
     }
