@@ -16,8 +16,6 @@ pub use self::fadt::*;
 pub use self::anam::*;
 pub use self::intv::*;
 
-use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
-
 use crate::binary::*;
 use crate::esx::util::name_to_string;
 

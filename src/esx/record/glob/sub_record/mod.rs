@@ -8,8 +8,6 @@ pub use self::name::*;
 pub use self::fnam::*;
 pub use self::fltv::*;
 
-use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
-
 use crate::binary::*;
 use crate::esx::util::name_to_string;
 

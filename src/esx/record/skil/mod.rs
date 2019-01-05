@@ -1,7 +1,5 @@
 pub mod sub_record;
 
-use std::io::{Error, ErrorKind, Read, Result, Seek, SeekFrom, Write};
-
 use super::record_flags::RecordFlags;
 use self::sub_record::*;
 use crate::binary::*;

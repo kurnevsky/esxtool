@@ -8,8 +8,6 @@ pub use self::scvr::*;
 pub use self::scdt::*;
 pub use self::sctx::*;
 
-use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
-
 use crate::binary::*;
 use crate::esx::util::name_to_string;
 

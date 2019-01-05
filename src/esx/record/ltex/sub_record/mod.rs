@@ -6,8 +6,6 @@ pub use self::name::*;
 pub use self::intv::*;
 pub use self::data::*;
 
-use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
-
 use crate::binary::*;
 use crate::esx::util::name_to_string;
 

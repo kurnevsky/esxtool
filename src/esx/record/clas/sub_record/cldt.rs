@@ -1,5 +1,3 @@
-use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
-
 use super::flags::Flags;
 use super::auto_calc_flags::AutoCalcFlags;
 use crate::binary::*;

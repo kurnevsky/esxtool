@@ -1,5 +1,3 @@
-use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
-
 use crate::binary::*;
 use crate::esx::specialization::Specialization;
 

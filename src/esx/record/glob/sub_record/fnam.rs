@@ -1,5 +1,3 @@
-use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
-
 use super::global_type::GlobalType;
 use crate::binary::*;
 

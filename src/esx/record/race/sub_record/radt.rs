@@ -1,5 +1,3 @@
-use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
-
 use super::skill_bonus::SkillBonus;
 use super::flags::Flags;
 use crate::binary::*;

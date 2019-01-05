@@ -12,8 +12,6 @@ pub use self::bnam::*;
 pub use self::cnam::*;
 pub use self::snam::*;
 
-use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
-
 use crate::binary::*;
 use crate::esx::util::name_to_string;
 
