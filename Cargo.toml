@@ -12,6 +12,8 @@ byteorder = "1.2"
 clap = "2.32"
 combine = "3.6"
 encoding = "0.2"
+env_logger = "0.6"
+log = "0.4"
 phf = "0.7"
 seek_bufread = "1.2" #31100
 

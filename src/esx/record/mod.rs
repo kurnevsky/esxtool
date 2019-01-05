@@ -34,6 +34,7 @@ use self::ltex::LtexRecord;
 use self::stat::StatRecord;
 use self::unknown::UnknownRecord;
 use crate::binary::*;
+use crate::esx::util::name_to_string;
 
 macro_rules! record {
   ( $( $variant:ident ( $value:ty ) => $name:expr ),* ) => {
@@ -59,6 +60,7 @@ macro_rules! record {
     impl Binary for Record {
       fn read<R: Read + Seek, E: Encoding>(input: &mut R, encoding: &E) -> Result<Self> {
         let name = read_name(input)?;
+        trace!("Read record {}", name_to_string(name));
         match &name {
           $(
             $name => <$value>::read(input, encoding).map(Record::$variant),

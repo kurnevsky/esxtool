@@ -5,6 +5,9 @@ extern crate byteorder;
 extern crate clap;
 extern crate combine;
 extern crate encoding;
+extern crate env_logger;
+#[macro_use]
+extern crate log;
 extern crate phf;
 extern crate seek_bufread;
 
@@ -27,6 +30,8 @@ use crate::binary::Binary;
 use crate::esx::Esx;
 
 fn main() -> Result<()> {
+  env_logger::init();
+
   let input_arg = Arg::with_name("input")
     .long("input")
     .short("i")

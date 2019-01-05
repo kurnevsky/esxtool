@@ -109,6 +109,7 @@ macro_rules! esx_sub_record {
     impl Binary for $sub_record {
       fn read<R: Read + Seek, E: encoding::Encoding>(input: &mut R, encoding: &E) -> Result<Self> {
         let name = read_name(input)?;
+        trace!("Read subrecord {}", name_to_string(name));
         match &name {
           $(
             $name => <$value>::read(input, encoding).map($sub_record::$variant),
