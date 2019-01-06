@@ -28,6 +28,8 @@ use crate::esx::record::ltex::LtexRecord;
 use crate::esx::record::ltex::sub_record::LtexSubRecord;
 use crate::esx::record::stat::StatRecord;
 use crate::esx::record::stat::sub_record::StatSubRecord;
+use crate::esx::record::door::DoorRecord;
+use crate::esx::record::door::sub_record::DoorSubRecord;
 use crate::esx::util::name_to_string;
 
 macro_rules! print_field {
@@ -405,6 +407,32 @@ fn trace_stat(stat: &StatRecord) {
   }
 }
 
+fn trace_door(door: &DoorRecord) {
+  for (sub_record_number, sub_record) in door.sub_records.iter().enumerate() {
+    println!("\t{} {}", name_to_string(sub_record.name()), sub_record_number);
+    match sub_record {
+      DoorSubRecord::Name(name) => {
+        print_field!(name.name);
+      },
+      DoorSubRecord::Fnam(fnam) => {
+        print_field!(fnam.name);
+      },
+      DoorSubRecord::Modl(modl) => {
+        print_field!(modl.model);
+      },
+      DoorSubRecord::Scri(scri) => {
+        print_field!(scri.script);
+      },
+      DoorSubRecord::Snam(snam) => {
+        print_field!(snam.name);
+      },
+      DoorSubRecord::Anam(anam) => {
+        print_field!(anam.name);
+      }
+    }
+  }
+}
+
 pub fn trace(esx: &Esx, scripts: bool) {
   for (record_number, record) in esx.records.iter().enumerate() {
     println!("{} {}", name_to_string(record.name()), record_number);
@@ -423,6 +451,7 @@ pub fn trace(esx: &Esx, scripts: bool) {
       Record::Bsgn(bsgn) => trace_bsgn(bsgn),
       Record::Ltex(ltex) => trace_ltex(ltex),
       Record::Stat(stat) => trace_stat(stat),
+      Record::Door(door) => trace_door(door),
       Record::Unknown(unknown) => {
         for (sub_record_number, sub_record) in unknown.sub_records.iter().enumerate() {
           println!("\t{} {}", name_to_string(sub_record.name), sub_record_number);

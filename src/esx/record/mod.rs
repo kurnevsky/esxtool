@@ -13,6 +13,7 @@ pub mod regn;
 pub mod bsgn;
 pub mod ltex;
 pub mod stat;
+pub mod door;
 pub mod unknown;
 
 use std::io::{Read, Result, Seek, SeekFrom, Write};
@@ -32,6 +33,7 @@ use self::regn::RegnRecord;
 use self::bsgn::BsgnRecord;
 use self::ltex::LtexRecord;
 use self::stat::StatRecord;
+use self::door::DoorRecord;
 use self::unknown::UnknownRecord;
 use crate::binary::*;
 use crate::esx::util::name_to_string;
@@ -104,7 +106,8 @@ record! {
   Regn(RegnRecord) => b"REGN",
   Bsgn(BsgnRecord) => b"BSGN",
   Ltex(LtexRecord) => b"LTEX",
-  Stat(StatRecord) => b"STAT"
+  Stat(StatRecord) => b"STAT",
+  Door(DoorRecord) => b"DOOR"
 }
 
 #[cfg(test)]
