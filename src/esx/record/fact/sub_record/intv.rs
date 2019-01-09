@@ -5,12 +5,3 @@ esx_sub_record_simple! {
     value: i32
   }
 }
-
-#[cfg(test)]
-mod tests {
-  use super::*;
-
-  read_write_test!(fact_intv_read_write, FactIntv {
-    value: 42
-  });
-}

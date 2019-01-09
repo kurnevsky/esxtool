@@ -16,20 +16,3 @@ esx_sub_record! {
     Data(LtexData) => b"DATA"
   }
 }
-
-#[cfg(test)]
-mod tests {
-  use super::*;
-
-  read_write_test!(ltex_sub_record_name_read_write, LtexSubRecord::Name(LtexName {
-    name: String::from("42")
-  }));
-
-  read_write_test!(ltex_sub_record_intv_read_write, LtexSubRecord::Intv(LtexIntv {
-    value: 42
-  }));
-
-  read_write_test!(ltex_sub_record_data_read_write, LtexSubRecord::Data(LtexData {
-    name: String::from("42")
-  }));
-}

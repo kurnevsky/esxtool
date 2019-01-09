@@ -19,32 +19,3 @@ esx_sub_record! {
     Sctx(ScptSctx) => b"SCTX"
   }
 }
-
-#[cfg(test)]
-mod tests {
-  use super::*;
-
-  read_write_test!(scpt_sub_record_schd_read_write, ScptSubRecord::Schd(ScptSchd {
-    name: String::from("42"),
-    num_shorts: 42,
-    num_longs: 42,
-    num_floats: 42,
-    script_data_size: 42,
-    local_var_size: 42,
-  }));
-
-  read_write_test!(scpt_sub_record_scvr_read_write, ScptSubRecord::Scvr(ScptScvr {
-    variables: vec![
-      String::from("42"),
-      String::from("43"),
-    ],
-  }));
-
-  read_write_test!(scpt_sub_record_scdt_read_write, ScptSubRecord::Scdt(ScptScdt {
-    data: vec![42; 123],
-  }));
-
-  read_write_test!(scpt_sub_record_sctx_read_write, ScptSubRecord::Sctx(ScptSctx {
-    text: String::from("42")
-  }));
-}

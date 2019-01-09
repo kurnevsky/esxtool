@@ -3,6 +3,7 @@ use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
 use encoding::Encoding;
 
 use crate::binary::*;
+use crate::samples::Samples;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct RegnWeat {
@@ -75,32 +76,49 @@ impl Binary for RegnWeat {
 }
 
 #[cfg(test)]
-mod tests {
-  use super::*;
-
-  read_write_test!(regn_weat_8_read_write, RegnWeat {
-    clear: 42,
-    cloudy: 42,
-    foggy: 42,
-    overcast: 42,
-    rain: 42,
-    thunder: 42,
-    ash: 42,
-    blight: 42,
-    snow: 0,
-    blizard: 0,
-  });
-
-  read_write_test!(regn_weat_10_read_write, RegnWeat {
-    clear: 42,
-    cloudy: 42,
-    foggy: 42,
-    overcast: 42,
-    rain: 42,
-    thunder: 42,
-    ash: 42,
-    blight: 42,
-    snow: 42,
-    blizard: 42,
-  });
+impl Samples for RegnWeat {
+  fn single() -> Self {
+    RegnWeat {
+      clear: 42,
+      cloudy: 42,
+      foggy: 42,
+      overcast: 42,
+      rain: 42,
+      thunder: 42,
+      ash: 42,
+      blight: 42,
+      snow: 42,
+      blizard: 42,
+    }
+  }
+  fn samples() -> Vec<Self> {
+    vec![
+      RegnWeat {
+        clear: 42,
+        cloudy: 42,
+        foggy: 42,
+        overcast: 42,
+        rain: 42,
+        thunder: 42,
+        ash: 42,
+        blight: 42,
+        snow: 42,
+        blizard: 42,
+      },
+      RegnWeat {
+        clear: 42,
+        cloudy: 42,
+        foggy: 42,
+        overcast: 42,
+        rain: 42,
+        thunder: 42,
+        ash: 42,
+        blight: 42,
+        snow: 0,
+        blizard: 0,
+      }
+    ]
+  }
 }
+
+read_write_test!(RegnWeat);

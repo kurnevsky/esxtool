@@ -1,7 +1,7 @@
 use crate::binary::Binary;
 
-bitflags! {
-  pub struct AutoCalcFlags: u32 {
+esx_bitflags! {
+  struct AutoCalcFlags: u32 {
     const Weapon = 0x0000_0001;
     const Armor = 0x0000_0002;
     const Clothing = 0x0000_0004;
@@ -22,5 +22,3 @@ bitflags! {
     const RepairItem = 0x0002_0000;
   }
 }
-
-bitflags_binary!(AutoCalcFlags);

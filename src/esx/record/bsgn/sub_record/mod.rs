@@ -22,28 +22,3 @@ esx_sub_record! {
     Npcs(BsgnNpcs) => b"NPCS"
   }
 }
-
-#[cfg(test)]
-mod tests {
-  use super::*;
-
-  read_write_test!(bsgn_sub_record_name_read_write, BsgnSubRecord::Name(BsgnName {
-    name: String::from("42")
-  }));
-
-  read_write_test!(bsgn_sub_record_fnam_read_write, BsgnSubRecord::Fnam(BsgnFnam {
-    name: String::from("42")
-  }));
-
-  read_write_test!(bsgn_sub_record_tnam_read_write, BsgnSubRecord::Tnam(BsgnTnam {
-    name: String::from("42")
-  }));
-
-  read_write_test!(bsgn_sub_record_desc_read_write, BsgnSubRecord::Desc(BsgnDesc {
-    description: String::from("42")
-  }));
-
-  read_write_test!(bsgn_sub_record_npcs_read_write, BsgnSubRecord::Npcs(BsgnNpcs {
-    ability: String::from("42"),
-  }));
-}

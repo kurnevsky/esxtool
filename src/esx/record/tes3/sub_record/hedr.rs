@@ -4,6 +4,7 @@ use encoding::Encoding;
 
 use super::file_type::FileType;
 use crate::binary::*;
+use crate::samples::Samples;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Tes3Hedr {
@@ -46,14 +47,16 @@ impl Binary for Tes3Hedr {
 }
 
 #[cfg(test)]
-mod tests {
-  use super::*;
-
-  read_write_test!(tes3_hedr_read_write, Tes3Hedr {
-    version: 42f32,
-    file_type: FileType::Esp,
-    company_name: String::from("42"),
-    file_description: String::from("43"),
-    num_records: 43
-  });
+impl Samples for Tes3Hedr {
+  fn single() -> Self {
+    Tes3Hedr {
+      version: 42f32,
+      file_type: FileType::Esp,
+      company_name: String::from("42"),
+      file_description: String::from("43"),
+      num_records: 43
+    }
+  }
 }
+
+read_write_test!(Tes3Hedr);

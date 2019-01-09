@@ -7,12 +7,3 @@ esx_enum! {
     Ess = 32
   }
 }
-
-#[cfg(test)]
-mod tests {
-  use super::*;
-
-  read_write_test!(file_type_esp_read_write, FileType::Esp);
-  read_write_test!(file_type_esm_read_write, FileType::Esm);
-  read_write_test!(file_type_ess_read_write, FileType::Ess);
-}

@@ -77,18 +77,22 @@ pub fn read_name<R: Read>(input: &mut R) -> Result<[u8; 4]> {
 
 #[cfg(test)]
 macro_rules! read_write_test (
-  ($test:ident, $value:expr) => (
+  ($type:ty) => (
     #[test]
-    fn $test() {
+    fn read_write() {
       use encoding::all::ASCII;
       use std::io::Cursor;
-      let before = $value;
+      use crate::samples::Samples;
       let mut buf = Cursor::new(Vec::new());
-      let len = before.write(&mut buf, ASCII).unwrap();
-      assert_eq!(len, buf.get_ref().len() as u32);
-      buf.set_position(0);
-      let after = Binary::read(&mut buf, ASCII).unwrap();
-      assert_eq!(before, after);
+      for before in <$type>::samples() {
+          let len = before.write(&mut buf, ASCII).unwrap();
+          assert_eq!(len, buf.get_ref().len() as u32);
+          buf.set_position(0);
+          let after = Binary::read(&mut buf, ASCII).unwrap();
+          assert_eq!(before, after);
+          buf.set_position(0);
+          buf.get_mut().clear();
+      }
     }
   )
 );

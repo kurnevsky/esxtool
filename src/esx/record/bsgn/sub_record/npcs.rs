@@ -3,9 +3,10 @@ use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
 use encoding::Encoding;
 
 use crate::binary::*;
+use crate::samples::Samples;
 
 #[derive(Debug, Clone, PartialEq)]
-pub struct BsgnNpcs {
+pub struct BsgnNpcs { //TODO: macro?
   pub ability: String,
 }
 
@@ -29,10 +30,12 @@ impl Binary for BsgnNpcs {
 }
 
 #[cfg(test)]
-mod tests {
-  use super::*;
-
-  read_write_test!(bsgn_npcs_read_write, BsgnNpcs {
-    ability: String::from("42"),
-  });
+impl Samples for BsgnNpcs {
+  fn single() -> Self {
+    BsgnNpcs {
+      ability: String::from("42"),
+    }
+  }
 }
+
+read_write_test!(BsgnNpcs);

@@ -6,13 +6,3 @@ esx_data! {
     bonus: u32
   }
 }
-
-#[cfg(test)]
-mod tests {
-  use super::*;
-
-  read_write_test!(skill_bonus_read_write, SkillBonus {
-    skill_id: 42,
-    bonus: 42,
-  });
-}

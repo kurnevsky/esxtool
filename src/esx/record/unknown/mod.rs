@@ -4,6 +4,7 @@ use encoding::Encoding;
 
 use super::record_flags::RecordFlags;
 use crate::binary::*;
+use crate::samples::Samples;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct UnknownRecord {
@@ -80,23 +81,42 @@ impl Binary for UnknownSubRecord {
 }
 
 #[cfg(test)]
-mod tests {
+impl Samples for UnknownSubRecord {
+  fn single() -> Self {
+    UnknownSubRecord {
+      name: *b"ABCD",
+      data: vec![42; 123],
+    }
+  }
+}
+
+#[cfg(test)]
+impl Samples for UnknownRecord {
+  fn single() -> Self {
+    UnknownRecord {
+      name: *b"ABCD",
+      unknown: 42,
+      flags: RecordFlags::Persistent,
+      sub_records: vec![
+        UnknownSubRecord {
+          name: *b"ABCD",
+          data: vec![42; 123],
+        }
+      ],
+    }
+  }
+}
+
+#[cfg(test)]
+mod sub_record {
   use super::*;
 
-  read_write_test!(unknown_record_read_write, UnknownRecord {
-    name: *b"ABCD",
-    unknown: 42,
-    flags: RecordFlags::Persistent,
-    sub_records: vec![
-      UnknownSubRecord {
-        name: *b"ABCD",
-        data: vec![42; 123],
-      }
-    ],
-  });
+  read_write_test!(UnknownSubRecord);
+}
 
-  read_write_test!(unknown_sub_record_read_write, UnknownSubRecord {
-    name: *b"ABCD",
-    data: vec![42; 123],
-  });
+#[cfg(test)]
+mod record {
+  use super::*;
+
+  read_write_test!(UnknownRecord);
 }

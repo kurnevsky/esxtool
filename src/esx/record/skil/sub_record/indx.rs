@@ -5,12 +5,3 @@ esx_sub_record_simple! {
     skill_id: u32
   }
 }
-
-#[cfg(test)]
-mod tests {
-  use super::*;
-
-  read_write_test!(skil_indx_read_write, SkilIndx {
-    skill_id: 42
-  });
-}

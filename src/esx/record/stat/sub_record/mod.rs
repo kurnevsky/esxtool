@@ -13,16 +13,3 @@ esx_sub_record! {
     Modl(StatModl) => b"MODL"
   }
 }
-
-#[cfg(test)]
-mod tests {
-  use super::*;
-
-  read_write_test!(stat_sub_record_name_read_write, StatSubRecord::Name(StatName {
-    name: String::from("42")
-  }));
-
-  read_write_test!(stat_sub_record_modl_read_write, StatSubRecord::Modl(StatModl {
-    model: String::from("42")
-  }));
-}

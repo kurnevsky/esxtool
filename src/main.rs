@@ -19,6 +19,9 @@ mod stats;
 mod trace;
 mod mwscript;
 
+#[cfg(test)]
+mod samples;
+
 use std::fs::File;
 use std::io::{BufWriter, Result};
 

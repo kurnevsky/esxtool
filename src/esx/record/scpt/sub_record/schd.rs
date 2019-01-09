@@ -3,6 +3,7 @@ use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
 use encoding::Encoding;
 
 use crate::binary::*;
+use crate::samples::Samples;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct ScptSchd {
@@ -49,15 +50,17 @@ impl Binary for ScptSchd {
 }
 
 #[cfg(test)]
-mod tests {
-  use super::*;
-
-  read_write_test!(scpt_schd_read_write, ScptSchd {
-    name: String::from("42"),
-    num_shorts: 42,
-    num_longs: 42,
-    num_floats: 42,
-    script_data_size: 42,
-    local_var_size: 42,
-  });
+impl Samples for ScptSchd {
+  fn single() -> Self {
+    ScptSchd {
+      name: String::from("42"),
+      num_shorts: 42,
+      num_longs: 42,
+      num_floats: 42,
+      script_data_size: 42,
+      local_var_size: 42,
+    }
+  }
 }
+
+read_write_test!(ScptSchd);

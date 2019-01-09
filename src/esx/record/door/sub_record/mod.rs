@@ -25,32 +25,3 @@ esx_sub_record! {
     Anam(DoorAnam) => b"ANAM"
   }
 }
-
-#[cfg(test)]
-mod tests {
-  use super::*;
-
-  read_write_test!(door_sub_record_name_read_write, DoorSubRecord::Name(DoorName {
-    name: String::from("42")
-  }));
-
-  read_write_test!(door_sub_record_fnam_read_write, DoorSubRecord::Fnam(DoorFnam {
-    name: String::from("42")
-  }));
-
-  read_write_test!(door_sub_record_modl_read_write, DoorSubRecord::Modl(DoorModl {
-    model: String::from("42")
-  }));
-
-  read_write_test!(door_sub_record_scri_read_write, DoorSubRecord::Scri(DoorScri {
-    script: String::from("42")
-  }));
-
-  read_write_test!(door_sub_record_snam_read_write, DoorSubRecord::Snam(DoorSnam {
-    name: String::from("42")
-  }));
-
-  read_write_test!(door_sub_record_anam_read_write, DoorSubRecord::Anam(DoorAnam {
-    name: String::from("42")
-  }));
-}

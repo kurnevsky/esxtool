@@ -1,3 +1,7 @@
+macro_rules! first {
+  ($first:expr, $($rest:expr,)*) => { $first };
+}
+
 macro_rules! esx_enum {
   ( enum $name:ident : $enum_type:ident { $( $variant:ident = $number:expr ),* } ) => {
     #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -36,6 +40,20 @@ macro_rules! esx_enum {
         Ok(size_of::<$enum_type>() as u32)
       }
     }
+
+    #[cfg(test)]
+    impl crate::samples::Samples for $name {
+      fn samples() -> Vec<Self> {
+        vec![
+          $($name::$variant),*
+        ]
+      }
+      fn single() -> Self {
+        first!($($name::$variant,)*)
+      }
+    }
+
+    read_write_test!($name);
   }
 }
 
@@ -84,6 +102,19 @@ macro_rules! esx_record {
         Ok(len + 12)
       }
     }
+
+    #[cfg(test)]
+    impl crate::samples::Samples for $record {
+      fn single() -> Self {
+        $record {
+          unknown: 0,
+          flags: RecordFlags::Persistent,
+          sub_records: crate::samples::Samples::samples(),
+        }
+      }
+    }
+
+    read_write_test!($record);
   }
 }
 
@@ -130,6 +161,20 @@ macro_rules! esx_sub_record {
         Ok(len + 4)
       }
     }
+
+    #[cfg(test)]
+    impl crate::samples::Samples for $sub_record {
+      fn samples() -> Vec<Self> {
+        vec![
+          $($sub_record::$variant(<$value>::single()),)*
+        ]
+      }
+      fn single() -> Self {
+        first!($($sub_record::$variant(<$value>::single()),)*)
+      }
+    }
+
+    read_write_test!($sub_record);
   }
 }
 
@@ -140,6 +185,18 @@ macro_rules! total_size {
 }
 
 macro_rules! esx_data {
+  (@inner $name:ident $vec:ident [$($left:ident,)*] []) => { };
+  (@inner $name:ident $vec:ident [$($left:ident,)*] [$current:ident, $($right:ident,)*]) => {
+    for value in crate::samples::Samples::samples() {
+      $vec.push($name {
+        $($left: crate::samples::Samples::single(),)*
+          $current: value,
+          $($right: crate::samples::Samples::single(),)*
+      });
+    }
+    esx_data!(@inner $name $vec [$($left,)* $current,] [$($right,)*])
+  };
+
   ( struct $name:ident { $($field:ident : $field_type:ty ),* } ) => {
     #[derive(Debug, Clone, PartialEq)]
     pub struct $name {
@@ -164,10 +221,38 @@ macro_rules! esx_data {
         Ok(total_size!($($field_type),*))
       }
     }
+
+    #[cfg(test)]
+    impl crate::samples::Samples for $name {
+      fn samples() -> Vec<Self> {
+        let mut vec = Vec::new();
+        esx_data!(@inner $name vec [] [$($field,)*]);
+        vec
+      }
+      fn single() -> Self {
+        $name {
+          $($field: crate::samples::Samples::single()),*
+        }
+      }
+    }
+
+    read_write_test!($name);
   }
 }
 
 macro_rules! esx_sub_record_simple {
+  (@inner $name:ident $vec:ident [$($left:ident,)*] []) => { };
+  (@inner $name:ident $vec:ident [$($left:ident,)*] [$current:ident, $($right:ident,)*]) => {
+    for value in crate::samples::Samples::samples() {
+      $vec.push($name {
+        $($left: crate::samples::Samples::single(),)*
+          $current: value,
+          $($right: crate::samples::Samples::single(),)*
+      });
+    }
+    esx_sub_record_simple!(@inner $name $vec [$($left,)* $current,] [$($right,)*])
+  };
+
   ( struct $name:ident { $($field:ident : $field_type:ty ),* } ) => {
     #[derive(Debug, Clone, PartialEq)]
     pub struct $name {
@@ -198,6 +283,22 @@ macro_rules! esx_sub_record_simple {
         Ok(total_size!($($field_type),*) + 4)
       }
     }
+
+    #[cfg(test)]
+    impl crate::samples::Samples for $name {
+      fn samples() -> Vec<Self> {
+        let mut vec = Vec::new();
+        esx_sub_record_simple!(@inner $name vec [] [$($field,)*]);
+        vec
+      }
+      fn single() -> Self {
+        $name {
+          $($field: crate::samples::Samples::single()),*
+        }
+      }
+    }
+
+    read_write_test!($name);
   }
 }
 
@@ -224,6 +325,17 @@ macro_rules! esx_sub_record_vec {
         Ok(self.$field.len() as u32 + 4)
       }
     }
+
+    #[cfg(test)]
+    impl crate::samples::Samples for $name {
+      fn single() -> Self {
+        $name {
+          $field: vec![42; 123]
+        }
+      }
+    }
+
+    read_write_test!($name);
   }
 }
 
@@ -261,6 +373,17 @@ macro_rules! esx_sub_record_string {
         Ok(len + 4)
       }
     }
+
+    #[cfg(test)]
+    impl crate::samples::Samples for $name {
+      fn single() -> Self {
+        $name {
+          $field: String::from("42")
+        }
+      }
+    }
+
+    read_write_test!($name);
   }
 }
 
@@ -300,6 +423,17 @@ macro_rules! esx_sub_record_null_terminated_string {
         Ok(len + 4)
       }
     }
+
+    #[cfg(test)]
+    impl crate::samples::Samples for $name {
+      fn single() -> Self {
+        $name {
+          $field: String::from("42")
+        }
+      }
+    }
+
+    read_write_test!($name);
   }
 }
 
@@ -328,11 +462,36 @@ macro_rules! esx_sub_record_fixed_string {
         Ok($size + 4)
       }
     }
+
+    #[cfg(test)]
+    impl crate::samples::Samples for $name {
+      fn single() -> Self {
+        $name {
+          $field: String::from("42")
+        }
+      }
+    }
+
+    read_write_test!($name);
   }
 }
 
-macro_rules! bitflags_binary {
-  ( $name:ident ) => {
+macro_rules! esx_bitflags {
+  (
+    struct $name:ident : $type:ty {
+      $(
+        const $flag:ident = $value:expr;
+      )+
+    }
+  ) => {
+    bitflags! {
+      pub struct $name: $type {
+        $(
+          const $flag = $value;
+        )*
+      }
+    }
+
     impl Binary for $name {
       fn read<R: std::io::Read + std::io::Seek, E: encoding::Encoding>(input: &mut R, encoding: &E) -> std::io::Result<Self> {
         let flags = Binary::read(input, encoding)?;
@@ -345,5 +504,19 @@ macro_rules! bitflags_binary {
         self.bits().write(output, encoding)
       }
     }
-  }
+
+    #[cfg(test)]
+    impl crate::samples::Samples for $name {
+      fn samples() -> Vec<Self> {
+        vec![
+          $($name::$flag),*
+        ]
+      }
+      fn single() -> Self {
+        first!($($name::$flag,)*)
+      }
+    }
+
+    read_write_test!($name);
+  };
 }

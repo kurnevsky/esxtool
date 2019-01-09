@@ -89,6 +89,20 @@ macro_rules! record {
         Ok(len + 4)
       }
     }
+
+    #[cfg(test)]
+    impl crate::samples::Samples for Record {
+      fn samples() -> Vec<Self> {
+        vec![
+          $(Record::$variant(<$value>::single()),)*
+        ]
+      }
+      fn single() -> Self {
+        first!($(Record::$variant(<$value>::single()),)*)
+      }
+    }
+
+    read_write_test!(Record);
   }
 }
 
@@ -108,45 +122,4 @@ record! {
   Ltex(LtexRecord) => b"LTEX",
   Stat(StatRecord) => b"STAT",
   Door(DoorRecord) => b"DOOR"
-}
-
-#[cfg(test)]
-mod tests {
-  use super::*;
-
-  use super::record_flags::RecordFlags;
-  use super::tes3::sub_record::*;
-  use super::unknown::*;
-
-  read_write_test!(record_tes3_read_write, Record::Tes3(Tes3Record {
-    unknown: 42,
-    flags: RecordFlags::Persistent,
-    sub_records: vec![
-      Tes3SubRecord::Hedr(Tes3Hedr {
-        version: 42f32,
-        file_type: FileType::Esp,
-        company_name: String::from("42"),
-        file_description: String::from("43"),
-        num_records: 43
-      }),
-      Tes3SubRecord::Mast(Tes3Mast {
-        master_file_name: String::from("42")
-      }),
-      Tes3SubRecord::Data(Tes3Data {
-        master_size: 42
-      }),
-    ],
-  }));
-
-  read_write_test!(record_unknown_read_write, Record::Unknown(UnknownRecord {
-    name: *b"ABCD",
-    unknown: 42,
-    flags: RecordFlags::Persistent,
-    sub_records: vec![
-      UnknownSubRecord {
-        name: *b"ABCD",
-        data: vec![42; 123],
-      }
-    ],
-  }));
 }

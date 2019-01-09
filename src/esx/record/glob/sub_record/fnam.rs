@@ -6,12 +6,3 @@ esx_sub_record_simple! {
     global_type: GlobalType
   }
 }
-
-#[cfg(test)]
-mod tests {
-  use super::*;
-
-  read_write_test!(glob_fnam_read_write, GlobFnam {
-    global_type: GlobalType::Short
-  });
-}

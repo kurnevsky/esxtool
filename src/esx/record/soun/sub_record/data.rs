@@ -7,14 +7,3 @@ esx_sub_record_simple! {
     max_range: u8
   }
 }
-
-#[cfg(test)]
-mod tests {
-  use super::*;
-
-  read_write_test!(soun_data_read_write, SounData {
-    volume: 42,
-    min_range: 42,
-    max_range: 42,
-  });
-}
