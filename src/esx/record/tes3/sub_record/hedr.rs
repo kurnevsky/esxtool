@@ -4,7 +4,6 @@ use encoding::Encoding;
 
 use super::file_type::FileType;
 use crate::binary::*;
-use crate::samples::Samples;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Tes3Hedr {
@@ -47,7 +46,7 @@ impl Binary for Tes3Hedr {
 }
 
 #[cfg(test)]
-impl Samples for Tes3Hedr {
+impl crate::samples::Samples for Tes3Hedr {
   fn single() -> Self {
     Tes3Hedr {
       version: 42f32,

@@ -3,7 +3,6 @@ use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
 use encoding::Encoding;
 
 use crate::binary::*;
-use crate::samples::Samples;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct ScptSchd {
@@ -50,7 +49,7 @@ impl Binary for ScptSchd {
 }
 
 #[cfg(test)]
-impl Samples for ScptSchd {
+impl crate::samples::Samples for ScptSchd {
   fn single() -> Self {
     ScptSchd {
       name: String::from("42"),

@@ -14,6 +14,7 @@ pub mod bsgn;
 pub mod ltex;
 pub mod stat;
 pub mod door;
+pub mod weap;
 pub mod unknown;
 
 use std::io::{Read, Result, Seek, SeekFrom, Write};
@@ -34,6 +35,7 @@ use self::bsgn::BsgnRecord;
 use self::ltex::LtexRecord;
 use self::stat::StatRecord;
 use self::door::DoorRecord;
+use self::weap::WeapRecord;
 use self::unknown::UnknownRecord;
 use crate::binary::*;
 use crate::esx::util::name_to_string;
@@ -121,5 +123,6 @@ record! {
   Bsgn(BsgnRecord) => b"BSGN",
   Ltex(LtexRecord) => b"LTEX",
   Stat(StatRecord) => b"STAT",
-  Door(DoorRecord) => b"DOOR"
+  Door(DoorRecord) => b"DOOR",
+  Weap(WeapRecord) => b"WEAP"
 }

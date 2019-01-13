@@ -30,6 +30,8 @@ use crate::esx::record::stat::StatRecord;
 use crate::esx::record::stat::sub_record::StatSubRecord;
 use crate::esx::record::door::DoorRecord;
 use crate::esx::record::door::sub_record::DoorSubRecord;
+use crate::esx::record::weap::WeapRecord;
+use crate::esx::record::weap::sub_record::WeapSubRecord;
 use crate::esx::util::name_to_string;
 
 macro_rules! print_field {
@@ -433,6 +435,48 @@ fn trace_door(door: &DoorRecord) {
   }
 }
 
+fn trace_weap(weap: &WeapRecord) {
+  for (sub_record_number, sub_record) in weap.sub_records.iter().enumerate() {
+    println!("\t{} {}", name_to_string(sub_record.name()), sub_record_number);
+    match sub_record {
+      WeapSubRecord::Name(name) => {
+        print_field!(name.name);
+      },
+      WeapSubRecord::Modl(modl) => {
+        print_field!(modl.model);
+      },
+      WeapSubRecord::Fnam(fnam) => {
+        print_field!(fnam.name);
+      },
+      WeapSubRecord::Wpdt(wpdt) => {
+        print_field!(wpdt.weight);
+        print_field!(wpdt.value);
+        print_field!(wpdt.weapon_type, "{:?}");
+        print_field!(wpdt.health);
+        print_field!(wpdt.speed);
+        print_field!(wpdt.reach);
+        print_field!(wpdt.enchant_pts);
+        print_field!(wpdt.chop_min);
+        print_field!(wpdt.chop_max);
+        print_field!(wpdt.slash_min);
+        print_field!(wpdt.slash_max);
+        print_field!(wpdt.trust_min);
+        print_field!(wpdt.trust_max);
+        print_field!(wpdt.flags, "{:?}");
+      },
+      WeapSubRecord::Itex(itex) => {
+        print_field!(itex.inventory_icon);
+      },
+      WeapSubRecord::Enam(enam) => {
+        print_field!(enam.id);
+      },
+      WeapSubRecord::Scri(scri) => {
+        print_field!(scri.id);
+      },
+    }
+  }
+}
+
 pub fn trace(esx: &Esx, scripts: bool) {
   for (record_number, record) in esx.records.iter().enumerate() {
     println!("{} {}", name_to_string(record.name()), record_number);
@@ -452,6 +496,7 @@ pub fn trace(esx: &Esx, scripts: bool) {
       Record::Ltex(ltex) => trace_ltex(ltex),
       Record::Stat(stat) => trace_stat(stat),
       Record::Door(door) => trace_door(door),
+      Record::Weap(weap) => trace_weap(weap),
       Record::Unknown(unknown) => {
         for (sub_record_number, sub_record) in unknown.sub_records.iter().enumerate() {
           println!("\t{} {}", name_to_string(sub_record.name), sub_record_number);

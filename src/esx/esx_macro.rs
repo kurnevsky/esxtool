@@ -1,3 +1,4 @@
+#[cfg(test)]
 macro_rules! first {
   ($first:expr, $($rest:expr,)*) => { $first };
 }

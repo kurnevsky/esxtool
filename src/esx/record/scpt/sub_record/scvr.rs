@@ -3,7 +3,6 @@ use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
 use encoding::{DecoderTrap, EncoderTrap, Encoding};
 
 use crate::binary::*;
-use crate::samples::Samples;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct ScptScvr {
@@ -42,7 +41,7 @@ impl Binary for ScptScvr {
 }
 
 #[cfg(test)]
-impl Samples for ScptScvr {
+impl crate::samples::Samples for ScptScvr {
   fn single() -> Self {
     ScptScvr {
       variables: vec![

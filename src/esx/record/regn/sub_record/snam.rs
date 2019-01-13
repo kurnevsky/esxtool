@@ -3,7 +3,6 @@ use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
 use encoding::Encoding;
 
 use crate::binary::*;
-use crate::samples::Samples;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct RegnSnam {
@@ -34,7 +33,7 @@ impl Binary for RegnSnam {
 }
 
 #[cfg(test)]
-impl Samples for RegnSnam {
+impl crate::samples::Samples for RegnSnam {
   fn single() -> Self {
     RegnSnam {
       sound_name: String::from("42"),

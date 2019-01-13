@@ -3,7 +3,6 @@ use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
 use encoding::Encoding;
 
 use crate::binary::*;
-use crate::samples::Samples;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct BsgnNpcs { //TODO: macro?
@@ -30,7 +29,7 @@ impl Binary for BsgnNpcs {
 }
 
 #[cfg(test)]
-impl Samples for BsgnNpcs {
+impl crate::samples::Samples for BsgnNpcs {
   fn single() -> Self {
     BsgnNpcs {
       ability: String::from("42"),

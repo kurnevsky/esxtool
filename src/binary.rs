@@ -75,10 +75,10 @@ pub fn read_name<R: Read>(input: &mut R) -> Result<[u8; 4]> {
   Ok(buf)
 }
 
-#[cfg(test)]
 macro_rules! read_write_test (
   ($type:ty) => (
     #[test]
+    #[cfg(test)]
     fn read_write() {
       use encoding::all::ASCII;
       use std::io::Cursor;

@@ -3,7 +3,6 @@ use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
 use encoding::Encoding;
 
 use crate::binary::*;
-use crate::samples::Samples;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct RegnWeat {
@@ -76,7 +75,7 @@ impl Binary for RegnWeat {
 }
 
 #[cfg(test)]
-impl Samples for RegnWeat {
+impl crate::samples::Samples for RegnWeat {
   fn single() -> Self {
     RegnWeat {
       clear: 42,

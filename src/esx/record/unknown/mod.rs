@@ -4,7 +4,6 @@ use encoding::Encoding;
 
 use super::record_flags::RecordFlags;
 use crate::binary::*;
-use crate::samples::Samples;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct UnknownRecord {
@@ -81,7 +80,7 @@ impl Binary for UnknownSubRecord {
 }
 
 #[cfg(test)]
-impl Samples for UnknownSubRecord {
+impl crate::samples::Samples for UnknownSubRecord {
   fn single() -> Self {
     UnknownSubRecord {
       name: *b"ABCD",
@@ -91,7 +90,7 @@ impl Samples for UnknownSubRecord {
 }
 
 #[cfg(test)]
-impl Samples for UnknownRecord {
+impl crate::samples::Samples for UnknownRecord {
   fn single() -> Self {
     UnknownRecord {
       name: *b"ABCD",
