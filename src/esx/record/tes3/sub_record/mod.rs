@@ -9,7 +9,6 @@ pub use self::mast::*;
 pub use self::data::*;
 
 use crate::binary::*;
-use crate::esx::util::name_to_string;
 
 esx_sub_record! {
   enum Tes3SubRecord {

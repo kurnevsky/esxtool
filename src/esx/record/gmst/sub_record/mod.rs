@@ -9,7 +9,6 @@ pub use self::intv::*;
 pub use self::fltv::*;
 
 use crate::binary::*;
-use crate::esx::util::name_to_string;
 
 esx_sub_record! {
   enum GmstSubRecord {

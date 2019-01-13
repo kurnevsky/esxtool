@@ -13,7 +13,6 @@ pub use self::snam::*;
 pub use self::anam::*;
 
 use crate::binary::*;
-use crate::esx::util::name_to_string;
 
 esx_sub_record! {
   enum DoorSubRecord {

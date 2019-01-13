@@ -140,12 +140,12 @@ macro_rules! esx_sub_record {
     impl Binary for $sub_record {
       fn read<R: std::io::Read + std::io::Seek, E: encoding::Encoding>(input: &mut R, encoding: &E) -> std::io::Result<Self> {
         let name = read_name(input)?;
-        trace!("Read subrecord {}", name_to_string(name));
+        trace!("Read subrecord {}", crate::esx::util::name_to_string(name));
         match &name {
           $(
             $name => <$value>::read(input, encoding).map($sub_record::$variant),
           )*
-            other => Err(std::io::Error::new(std::io::ErrorKind::InvalidData, format!("Invalid sub record {} for {}", name_to_string(*other), stringify!($sub_record)))),
+            other => Err(std::io::Error::new(std::io::ErrorKind::InvalidData, format!("Invalid sub record {} for {}", crate::esx::util::name_to_string(*other), stringify!($sub_record)))),
         }
       }
 

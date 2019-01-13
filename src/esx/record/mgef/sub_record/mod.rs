@@ -31,7 +31,6 @@ pub use self::hsnd::*;
 pub use self::asnd::*;
 
 use crate::binary::*;
-use crate::esx::util::name_to_string;
 
 esx_sub_record! {
   enum MgefSubRecord {
