@@ -124,7 +124,7 @@ macro_rules! esx_sub_record {
     #[derive(Debug, Clone, PartialEq)]
     pub enum $sub_record {
       $(
-        $variant($value),
+        $variant(Box<$value>),
       )*
     }
 
@@ -144,7 +144,7 @@ macro_rules! esx_sub_record {
         trace!("Read subrecord {}", crate::esx::util::name_to_string(name));
         match &name {
           $(
-            $name => <$value>::read(input, encoding).map($sub_record::$variant),
+            $name => <$value>::read(input, encoding).map(Box::new).map($sub_record::$variant),
           )*
             other => Err(std::io::Error::new(std::io::ErrorKind::InvalidData, format!("Invalid sub record {} for {}", crate::esx::util::name_to_string(*other), stringify!($sub_record)))),
         }
@@ -167,11 +167,11 @@ macro_rules! esx_sub_record {
     impl crate::samples::Samples for $sub_record {
       fn samples() -> Vec<Self> {
         vec![
-          $($sub_record::$variant(<$value>::single()),)*
+          $($sub_record::$variant(Box::new(<$value>::single())),)*
         ]
       }
       fn single() -> Self {
-        first!($($sub_record::$variant(<$value>::single()),)*)
+        first!($($sub_record::$variant(Box::new(<$value>::single())),)*)
       }
     }
 
