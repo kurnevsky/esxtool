@@ -1,4 +1,4 @@
-use super::funcs::{Func, Proc};
+use super::funcs::Func;
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Script {
@@ -12,7 +12,7 @@ pub enum Instr {
   ShortVar(String),
   LongVar(String),
   SetTo(Option<String>, String, Expr),
-  Proc(Option<String>, Proc, Vec<Arg>),
+  Proc(Option<String>, Func, Vec<Arg>),
   If(Vec<(Expr, Vec<Instr>)>, Vec<Instr>),
   While(Expr, Vec<Instr>),
 }

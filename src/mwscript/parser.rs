@@ -141,6 +141,7 @@ where
 {
   fix().then(|(fix, name)| match Func::by_name(&name) {
     Some(func) => {
+      // TODO: error when func.result() is ResType::Void?
       (
         value(fix),
         args(func.args(), func.required())
@@ -429,7 +430,7 @@ where
   I: RangeStream<Item = char, Range = &'a str> + 'a,
   I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
-  fix().then(|(fix, name)| match Proc::by_name(&name) {
+  fix().then(|(fix, name)| match Func::by_name(&name) {
     Some(proc) => {
       (
         value(fix),
@@ -618,7 +619,7 @@ mod tests {
     ).unwrap();
     assert_eq!(instr, Instr::If(
       vec![
-        (Expr::Brackets(Box::new(Expr::Long(1))), vec![Instr::Proc(None, Proc::Return, vec![])]),
+        (Expr::Brackets(Box::new(Expr::Long(1))), vec![Instr::Proc(None, Func::Return, vec![])]),
         (Expr::Long(2), vec![Instr::ShortVar("x".to_owned())]),
       ],
       vec![]
@@ -645,7 +646,7 @@ mod tests {
     let (instr, _) = instr().parse("StartScript test \n").unwrap();
     assert_eq!(instr, Instr::Proc(
       None,
-      Proc::StartScript,
+      Func::StartScript,
       vec![Arg::Id("test".to_owned())]
     ));
   }
@@ -655,7 +656,7 @@ mod tests {
     let (instr, _) = instr().parse("Player->AddItem gold_001 100 \n").unwrap();
     assert_eq!(instr, Instr::Proc(
       Some("Player".to_owned()),
-      Proc::AddItem,
+      Func::AddItem,
       vec![Arg::Id("gold_001".to_owned()), Arg::Expr(Expr::Long(100))]
     ));
   }

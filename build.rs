@@ -31,14 +31,6 @@ fn main() {
   funcs_file.read_to_string(&mut contents).expect("Failed to read funcs.rs");
 
   let names_re = Regex::new(r"\n\s*(?P<name>[[:alnum:]]+).*").expect("Failed to build names regex");
-
-  let procs_re = Regex::new(r"mwprocs! \{[^}]*\}").expect("Failed to build mwprocs regex");
-  let procs_str = procs_re.find(&contents).expect("Failed to find mwprocs in funcs.rs").as_str();
-  let procs_map = build_map("Proc", names_re.captures_iter(&procs_str));
-  write!(&mut file, "static PROCS: phf::Map<&'static str, Proc> = ").expect("Failed to write codegen.rs");
-  procs_map.build(&mut file).expect("Failed to write codegen.rs");
-  write!(&mut file, ";\n").expect("Failed to write codegen.rs");
-
   let funcs_re = Regex::new(r"mwfuncs! \{[^}]*\}").expect("Failed to build mwfuncs regex");
   let funcs_str = funcs_re.find(&contents).expect("Failed to find mwfuncs in funcs.rs").as_str();
   let funcs_map = build_map("Func", names_re.captures_iter(&funcs_str));
