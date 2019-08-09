@@ -95,7 +95,7 @@ impl crate::samples::Samples for UnknownRecord {
     UnknownRecord {
       name: *b"ABCD",
       unknown: 42,
-      flags: RecordFlags::Persistent,
+      flags: RecordFlags::PERSISTENT,
       sub_records: vec![
         UnknownSubRecord {
           name: *b"ABCD",

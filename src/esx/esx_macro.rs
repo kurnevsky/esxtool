@@ -109,7 +109,7 @@ macro_rules! esx_record {
       fn single() -> Self {
         $record {
           unknown: 0,
-          flags: RecordFlags::Persistent,
+          flags: RecordFlags::PERSISTENT,
           sub_records: crate::samples::Samples::samples(),
         }
       }
