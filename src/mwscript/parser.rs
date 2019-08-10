@@ -10,10 +10,11 @@ fn keyword<I>(s: &'static str) -> impl Parser<Input = I, Output = &'static str>
 where
   I: Stream<Item = char>,
   I::Error: ParseError<I::Item, I::Range, I::Position>,
-{ // todo: skip spaces here?
+{
   attempt(
     string_cmp(s, |l, r| l.eq_ignore_ascii_case(&r))
       .skip(not_followed_by(alpha_num().or(char('_'))))
+      .skip(whitespace())
   )
 }
 
@@ -295,7 +296,6 @@ where
   I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
   keyword("begin")
-    .with(whitespace())
     .with(id())
     .skip(lineend())
 }
@@ -306,7 +306,6 @@ where
   I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
   keyword("end")
-    .with(whitespace())
     .with(optional(id()))
 }
 
@@ -316,7 +315,6 @@ where
   I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
   keyword("float")
-    .with(whitespace())
     .with(id())
     .map(Instr::FloatVar)
     .skip(lineend())
@@ -328,7 +326,6 @@ where
   I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
   keyword("short")
-    .with(whitespace())
     .with(id())
     .map(Instr::ShortVar)
     .skip(lineend())
@@ -340,7 +337,6 @@ where
   I::Error: ParseError<I::Item, I::Range, I::Position>,
 {
   keyword("long")
-    .with(whitespace())
     .with(id())
     .map(Instr::LongVar)
     .skip(lineend())
@@ -353,14 +349,12 @@ where
 {
   (
     keyword("set"),
-    whitespace(),
     id(),
     optional(char('.').with(whitespace()).with(id())),
     keyword("to"),
-    whitespace(),
     expr(),
     lineend(),
-  ).map(|(_, _, name, var_name, _, _, expr, _)| match var_name {
+  ).map(|(_, name, var_name, _, expr, _)| match var_name {
     Some(var_name) => Instr::SetTo(Some(name), var_name, expr),
     None => Instr::SetTo(None, name, expr),
   })
@@ -382,11 +376,10 @@ where
     });
     let cond_block = (
       if_keyword,
-      whitespace(),
       expr(),
       lineend(),
       many(instr()),
-    ).map(|(_, _, cond, _, instrs)| {
+    ).map(|(_, cond, _, instrs)| {
       let _: Vec<Instr> = instrs;
       (cond, instrs)
     });
@@ -417,13 +410,12 @@ where
   let opaque_instr = parser(|i| instr().parse_stream(i));
   (
     keyword("while"),
-    whitespace(),
     expr(),
     lineend(),
     many(opaque_instr),
     keyword("endwhile"),
     lineend(),
-  ).map(|(_, _, cond, _, instrs, _, _)|
+  ).map(|(_, cond, _, instrs, _, _)|
     Instr::While(cond, instrs)
   )
 }
@@ -463,7 +455,7 @@ where
       keyword("endif").map(|_| "Endif keyword should not be parsed as Instr"),
       keyword("endwhile").map(|_| "Endwhile keyword should not be parsed as Instr"),
       keyword("end").map(|_| "End keyword should not be parsed as Instr"),
-    )).skip(not_followed_by(alpha_num().or(char('_'))))
+    ))
   );
   not_keyword.with(choice(( //todo move .skip(lineend()) here?
     float_var(),
