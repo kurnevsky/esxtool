@@ -141,13 +141,16 @@ where
 {
   fix().then(|(fix, name)| match Func::by_name(&name) {
     Some(func) => {
-      // TODO: error when func.result() is ResType::Void?
-      (
-        value(fix),
-        args(func.args(), func.required())
-      ).map(move |(fix, args)|
-        Expr::Func(fix, func, args)
-      ).left()
+      if func.result() != ResType::Void {
+        Parser::left((
+          value(fix),
+          args(func.args(), func.required())
+        ).map(move |(fix, args)|
+          Expr::Func(fix, func, args)
+        ).left())
+      } else {
+        Parser::left(unexpected_any("Unexpected void function").right())
+      }
     },
     None => {
       (
