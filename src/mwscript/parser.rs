@@ -317,7 +317,6 @@ where
   keyword("float")
     .with(id())
     .map(Instr::FloatVar)
-    .skip(lineend())
 }
 
 fn short_var<'a, I>() -> impl Parser<Input = I, Output = Instr> + 'a
@@ -328,7 +327,6 @@ where
   keyword("short")
     .with(id())
     .map(Instr::ShortVar)
-    .skip(lineend())
 }
 
 fn long_var<'a, I>() -> impl Parser<Input = I, Output = Instr> + 'a
@@ -339,7 +337,6 @@ where
   keyword("long")
     .with(id())
     .map(Instr::LongVar)
-    .skip(lineend())
 }
 
 fn set_to<'a, I>() -> impl Parser<Input = I, Output = Instr> + 'a
@@ -353,8 +350,7 @@ where
     optional(char('.').with(whitespace()).with(id())),
     keyword("to"),
     expr(),
-    lineend(),
-  ).map(|(_, name, var_name, _, expr, _)| match var_name {
+  ).map(|(_, name, var_name, _, expr)| match var_name {
     Some(var_name) => Instr::SetTo(Some(name), var_name, expr),
     None => Instr::SetTo(None, name, expr),
   })
@@ -395,8 +391,7 @@ where
       many1(cond_block),
       optional(else_block),
       keyword("endif"),
-      lineend(),
-    ).map(|(cond_blocks, else_block, _, _)|
+    ).map(|(cond_blocks, else_block, _)|
       Instr::If(cond_blocks, else_block.unwrap_or_else(Vec::new))
     ).parse_stream(i)
   })
@@ -414,8 +409,7 @@ where
     lineend(),
     many(opaque_instr),
     keyword("endwhile"),
-    lineend(),
-  ).map(|(_, cond, _, instrs, _, _)|
+  ).map(|(_, cond, _, instrs, _)|
     Instr::While(cond, instrs)
   )
 }
@@ -437,7 +431,7 @@ where
     None => {
       unexpected_any("Unexpected identifier").right()
     },
-  }).skip(lineend())
+  })
 }
 
 fn instr<'a, I>() -> impl Parser<Input = I, Output = Instr> + 'a
@@ -447,7 +441,6 @@ where
 {
   // not_followed_by is needed because proc can fail parsing keywords
   // the same could be done wrapping proc into attempt but this screws error messages
-  // TODO: parse end without name?
   let not_keyword = not_followed_by(
     choice((
       keyword("elseif").map(|_| "Elseif keyword should not be parsed as Instr"),
@@ -457,7 +450,7 @@ where
       keyword("end").map(|_| "End keyword should not be parsed as Instr"),
     ))
   );
-  not_keyword.with(choice(( //todo move .skip(lineend()) here?
+  not_keyword.with(choice((
     float_var(),
     short_var(),
     long_var(),
@@ -465,7 +458,7 @@ where
     ifelse(),
     whileloop(),
     proc(),
-  )))
+  ))).skip(lineend())
 }
 
 pub fn script<'a, I>() -> impl Parser<Input = I, Output = Script> + 'a
