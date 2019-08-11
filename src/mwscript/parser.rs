@@ -198,6 +198,12 @@ where
     .or(brackets())
 }
 
+fn to_tree((h, t): (Expr, Vec<(BinaryOp, Expr)>)) -> Expr {
+  t.into_iter().fold(h, |acc, (op, expr)|
+    Expr::BinaryOp(op, Box::new(acc), Box::new(expr))
+  )
+}
+
 fn muldiv<'a, I>() -> impl Parser<Input = I, Output = Expr> + 'a
 where
   I: RangeStream<Item = char, Range = &'a str> + 'a,
@@ -207,11 +213,7 @@ where
     .map(|_| BinaryOp::Mul)
     .or(char('/').map(|_| BinaryOp::Div))
     .skip(whitespace());
-  (minusplus(), many((op, minusplus()))).map(|(h, t): (Expr, Vec<(BinaryOp, Expr)>)|
-    t.into_iter().fold(h, |acc, (op, expr)|
-      Expr::BinaryOp(op, Box::new(acc), Box::new(expr))
-    )
-  )
+  (minusplus(), many((op, minusplus()))).map(to_tree)
 }
 
 fn addsub<'a, I>() -> impl Parser<Input = I, Output = Expr> + 'a
@@ -223,11 +225,7 @@ where
     .map(|_| BinaryOp::Add)
     .or(char('-').map(|_| BinaryOp::Sub))
     .skip(whitespace());
-  (muldiv(), many((op, muldiv()))).map(|(h, t): (Expr, Vec<(BinaryOp, Expr)>)|
-    t.into_iter().fold(h, |acc, (op, expr)|
-      Expr::BinaryOp(op, Box::new(acc), Box::new(expr))
-    )
-  )
+  (muldiv(), many((op, muldiv()))).map(to_tree)
 }
 
 fn comparison<'a, I>() -> impl Parser<Input = I, Output = Expr> + 'a
@@ -248,11 +246,7 @@ where
     attempt(string("<=")).map(|_| BinaryOp::LessOrEq),
     char('<').map(|_| BinaryOp::Less),
   )).skip(whitespace());
-  (addsub(), many((op, addsub()))).map(|(h, t): (Expr, Vec<(BinaryOp, Expr)>)| // todo: to_tree
-    t.into_iter().fold(h, |acc, (op, expr)|
-      Expr::BinaryOp(op, Box::new(acc), Box::new(expr))
-    )
-  )
+  (addsub(), many((op, addsub()))).map(to_tree)
 }
 
 fn expr<'a, I>() -> impl Parser<Input = I, Output = Expr> + 'a
