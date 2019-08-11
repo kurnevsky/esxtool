@@ -30,6 +30,8 @@ use crate::esx::record::stat::StatRecord;
 use crate::esx::record::stat::sub_record::StatSubRecord;
 use crate::esx::record::door::DoorRecord;
 use crate::esx::record::door::sub_record::DoorSubRecord;
+use crate::esx::record::misc::MiscRecord;
+use crate::esx::record::misc::sub_record::MiscSubRecord;
 use crate::esx::record::weap::WeapRecord;
 use crate::esx::record::weap::sub_record::WeapSubRecord;
 use crate::esx::util::name_to_string;
@@ -435,6 +437,37 @@ fn trace_door(door: &DoorRecord) {
   }
 }
 
+fn trace_misc(misc: &MiscRecord) {
+  for (sub_record_number, sub_record) in misc.sub_records.iter().enumerate() {
+    println!("\t{} {}", name_to_string(sub_record.name()), sub_record_number);
+    match sub_record {
+      MiscSubRecord::Name(name) => {
+        print_field!(name.name);
+      },
+      MiscSubRecord::Modl(modl) => {
+        print_field!(modl.model);
+      },
+      MiscSubRecord::Fnam(fnam) => {
+        print_field!(fnam.name);
+      },
+      MiscSubRecord::Mcdt(mcdt) => {
+        print_field!(mcdt.weight);
+        print_field!(mcdt.value);
+        print_field!(mcdt.is_key);
+      },
+      MiscSubRecord::Itex(itex) => {
+        print_field!(itex.inventory_icon);
+      },
+      MiscSubRecord::Enam(enam) => {
+        print_field!(enam.id);
+      },
+      MiscSubRecord::Scri(scri) => {
+        print_field!(scri.script);
+      },
+    }
+  }
+}
+
 fn trace_weap(weap: &WeapRecord) {
   for (sub_record_number, sub_record) in weap.sub_records.iter().enumerate() {
     println!("\t{} {}", name_to_string(sub_record.name()), sub_record_number);
@@ -471,7 +504,7 @@ fn trace_weap(weap: &WeapRecord) {
         print_field!(enam.id);
       },
       WeapSubRecord::Scri(scri) => {
-        print_field!(scri.id);
+        print_field!(scri.script);
       },
     }
   }
@@ -496,6 +529,7 @@ pub fn trace(esx: &Esx, scripts: bool) {
       Record::Ltex(ltex) => trace_ltex(ltex),
       Record::Stat(stat) => trace_stat(stat),
       Record::Door(door) => trace_door(door),
+      Record::Misc(misc) => trace_misc(misc),
       Record::Weap(weap) => trace_weap(weap),
       Record::Unknown(unknown) => {
         for (sub_record_number, sub_record) in unknown.sub_records.iter().enumerate() {

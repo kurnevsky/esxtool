@@ -14,6 +14,7 @@ pub mod bsgn;
 pub mod ltex;
 pub mod stat;
 pub mod door;
+pub mod misc;
 pub mod weap;
 pub mod unknown;
 
@@ -35,6 +36,7 @@ use self::bsgn::BsgnRecord;
 use self::ltex::LtexRecord;
 use self::stat::StatRecord;
 use self::door::DoorRecord;
+use self::misc::MiscRecord;
 use self::weap::WeapRecord;
 use self::unknown::UnknownRecord;
 use crate::binary::*;
@@ -124,5 +126,6 @@ record! {
   Ltex(LtexRecord) => b"LTEX",
   Stat(StatRecord) => b"STAT",
   Door(DoorRecord) => b"DOOR",
+  Misc(MiscRecord) => b"MISC",
   Weap(WeapRecord) => b"WEAP"
 }
