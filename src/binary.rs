@@ -1,5 +1,6 @@
 use std::io::{Error, ErrorKind, Read, Result, Seek, Write};
-use std::mem::{size_of, uninitialized};
+use std::mem::{MaybeUninit, forget, size_of};
+use std::ptr;
 
 use byteorder::LE;
 use encoding::{DecoderTrap, EncoderTrap, Encoding};
@@ -26,11 +27,15 @@ macro_rules! binary_array {
     $(
       impl<T: Binary> Binary for [T; $n] {
         fn read<R: Read + Seek, E: Encoding>(input: &mut R, encoding: &E) -> Result<Self> {
-          let mut res: [T; $n] = unsafe { uninitialized() };
+          let mut res: [MaybeUninit<T>; $n] = unsafe { MaybeUninit::uninit().assume_init() };
           for item in &mut res {
-              *item = T::read(input, encoding)?;
+            unsafe {
+              ptr::write(item.as_mut_ptr(), T::read(input, encoding)?); // TODO: MaybeUninit::write
+            }
           }
-          Ok(res)
+          let res_ptr = &mut res as *mut [MaybeUninit<T>; $n] as *mut [T; $n];
+          forget(res);
+          Ok(unsafe { ptr::read(res_ptr) })
         }
 
         fn write<W: Write + Seek, E: Encoding>(&self, output: &mut W, encoding: &E) -> Result<u32> {
