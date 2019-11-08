@@ -496,9 +496,10 @@ macro_rules! esx_bitflags {
     impl Binary for $name {
       fn read<R: std::io::Read + std::io::Seek, E: encoding::Encoding>(input: &mut R, encoding: &E) -> std::io::Result<Self> {
         let flags = Binary::read(input, encoding)?;
-        $name::from_bits(flags).ok_or_else(||
-          std::io::Error::new(std::io::ErrorKind::InvalidData, format!("Wrong flags of {} record: {}", stringify!($name), flags))
-        )
+        Ok($name::from_bits(flags).unwrap_or_else(|| {
+          warn!("Wrong flags of {} record: {}", stringify!($name), flags);
+          $name::from_bits_truncate(flags)
+        }))
       }
 
       fn write<W: std::io::Write + std::io::Seek, E: encoding::Encoding>(&self, output: &mut W, encoding: &E) -> std::io::Result<u32> {

@@ -62,6 +62,9 @@ fn trace_tes3(tes3: &Tes3Record) {
       Tes3SubRecord::Data(data) => {
         print_field!(data.master_size);
       },
+      Tes3SubRecord::Form(form) => {
+        print_field!(form.version);
+      },
     }
   }
 }

@@ -21,11 +21,10 @@ impl Binary for Esx {
   fn read<R: Read + Seek, E: Encoding>(input: &mut R, encoding: &E) -> Result<Self> {
     let first_record = Record::read(input, encoding)?;
     let num_records = if let Record::Tes3(ref tes3) = first_record {
-      if let Some(Tes3SubRecord::Hedr(hedr)) = tes3.sub_records.first() {
-        hedr.num_records
-      } else {
-        return Err(Error::new(ErrorKind::InvalidData, "Invalid TES3 record"));
-      }
+      tes3.sub_records.iter().find_map(|sub_record| match sub_record {
+        Tes3SubRecord::Hedr(hedr) => Some(hedr.num_records),
+        _ => None,
+      }).ok_or_else(|| Error::new(ErrorKind::InvalidData, "Invalid TES3 record"))?
     } else {
       return Err(Error::new(ErrorKind::InvalidData, "Invalid first record"));
     };
