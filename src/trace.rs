@@ -34,6 +34,8 @@ use crate::esx::record::misc::MiscRecord;
 use crate::esx::record::misc::sub_record::MiscSubRecord;
 use crate::esx::record::weap::WeapRecord;
 use crate::esx::record::weap::sub_record::WeapSubRecord;
+use crate::esx::record::jour::JourRecord;
+use crate::esx::record::jour::sub_record::JourSubRecord;
 use crate::esx::util::name_to_string;
 
 macro_rules! print_field {
@@ -513,6 +515,38 @@ fn trace_weap(weap: &WeapRecord) {
   }
 }
 
+fn trace_jour(jour: &JourRecord) {
+  for (sub_record_number, sub_record) in jour.sub_records.iter().enumerate() {
+    println!("\t{} {}", name_to_string(sub_record.name()), sub_record_number);
+    match sub_record {
+      JourSubRecord::Jety(jety) => {
+        print_field!(jety.journal_type, "{:?}");
+      },
+      JourSubRecord::Yeto(yeto) => {
+        print_field!(yeto.topic);
+      },
+      JourSubRecord::Yein(yein) => {
+        print_field!(yein.info);
+      },
+      JourSubRecord::Text(text) => {
+        print_field!(text.text);
+      },
+      JourSubRecord::Jeda(jeda) => {
+        print_field!(jeda.day);
+      },
+      JourSubRecord::Jemo(jemo) => {
+        print_field!(jemo.month);
+      },
+      JourSubRecord::Jedm(jedm) => {
+        print_field!(jedm.day_of_month);
+      },
+      JourSubRecord::Act_(act_) => {
+        print_field!(act_.actor_name);
+      },
+    }
+  }
+}
+
 pub fn trace(esx: &Esx, scripts: bool) {
   for (record_number, record) in esx.records.iter().enumerate() {
     println!("{} {}", name_to_string(record.name()), record_number);
@@ -534,6 +568,7 @@ pub fn trace(esx: &Esx, scripts: bool) {
       Record::Door(door) => trace_door(door),
       Record::Misc(misc) => trace_misc(misc),
       Record::Weap(weap) => trace_weap(weap),
+      Record::Jour(jour) => trace_jour(jour),
       Record::Unknown(unknown) => {
         for (sub_record_number, sub_record) in unknown.sub_records.iter().enumerate() {
           println!("\t{} {}", name_to_string(sub_record.name), sub_record_number);

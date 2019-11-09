@@ -16,6 +16,7 @@ pub mod stat;
 pub mod door;
 pub mod misc;
 pub mod weap;
+pub mod jour;
 pub mod unknown;
 
 use std::io::{Read, Result, Seek, SeekFrom, Write};
@@ -38,6 +39,7 @@ use self::stat::StatRecord;
 use self::door::DoorRecord;
 use self::misc::MiscRecord;
 use self::weap::WeapRecord;
+use self::jour::JourRecord;
 use self::unknown::UnknownRecord;
 use crate::binary::*;
 use crate::esx::util::name_to_string;
@@ -127,5 +129,6 @@ record! {
   Stat(StatRecord) => b"STAT",
   Door(DoorRecord) => b"DOOR",
   Misc(MiscRecord) => b"MISC",
-  Weap(WeapRecord) => b"WEAP"
+  Weap(WeapRecord) => b"WEAP",
+  Jour(JourRecord) => b"JOUR"
 }
